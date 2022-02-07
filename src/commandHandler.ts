@@ -9,20 +9,36 @@ const options = {
   port: 443,
   method: 'GET'
 }
-
+/**
+ * Sends an image of a monke as an embed.
+ * @param interaction The interaction to act upon.
+ */
 export async function handleMonke(interaction: CommandInteraction<CacheType>) {
+  await interaction.deferReply();
   await httpGet(options, async str => {
     var embed = new MessageEmbed().setImage(JSON.parse(str).url);
-    await interaction.reply({ content: "Here is Monke:", embeds: [embed] });
+    await interaction.editReply({ content: "Here is Monke:", embeds: [embed] });
   })
 }
+/**
+ * Tests the ping of the bot.
+ * @param interaction The interaction to act upon.
+ */
 export async function handleOoga(interaction: CommandInteraction<CacheType>) {
   await interaction.reply("Booga!");
 }
+/**
+ * Sends the link to the banana boat song.
+ * @param interaction The interaction to act upon.
+ */
 export async function handleSong(interaction: CommandInteraction<CacheType>) {
   if (interaction.options.getSubcommand() === 'banana')
     await interaction.reply("https://www.youtube.com/watch?v=4iIFK9sZN_E");
 }
+/**
+ * Reminds someone that they are simping, by sending them a direct message with a customized simp card.
+ * @param interaction The interaction to act upon.
+ */
 export async function handleSimp(interaction: CommandInteraction<CacheType>) {
   await interaction.deferReply();
   let user = interaction.options.getUser('simp', true);
@@ -37,10 +53,13 @@ export async function handleSimp(interaction: CommandInteraction<CacheType>) {
   await user.send({ files: [attachment] });
   await interaction.editReply({ content: `${user} has been notified of their simping!` });
 }
+/**
+ * Logic to add or get a quote from someone.
+ * @param interaction The interaction to act upon.
+ */
 export async function handleQuote(interaction: CommandInteraction<CacheType>) {
   if (interaction.inGuild() == false) return;
   await interaction.deferReply();
-  let user : User | null;
   switch (interaction.options.getSubcommand()) {
     case 'add':
       await handleQuoteAdd(interaction);
@@ -53,6 +72,10 @@ export async function handleQuote(interaction: CommandInteraction<CacheType>) {
       break;
   }
 }
+/**
+ * Add a quote.
+ * @param interaction The interaction to act upon.
+ */
 async function handleQuoteAdd(interaction: CommandInteraction<CacheType>){
   let user : User = interaction.options.getUser('user',true);
   let quote = interaction.options.getString('quote',true);
@@ -62,6 +85,10 @@ async function handleQuoteAdd(interaction: CommandInteraction<CacheType>){
   await writeFile(`./data/${interaction.guildId}.json`,data);
   await interaction.editReply(`Added Quote:\n"*${quote}*" by ${user.username}`);
 }
+/**
+ * Get a quote.
+ * @param interaction The interaction to act upon.
+ */
 async function handleQuoteUser(interaction: CommandInteraction<CacheType>){
   let user : User | null = interaction.options.getUser('user',false);
   var data = await readFile(`./data/${interaction.guildId}.json`);
