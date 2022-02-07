@@ -13,7 +13,7 @@ If you're not on the src directory, make sure to go there before running any com
 1. Setup all the node modules required for the program to run:
 * ```npm i```
 
-2. Copy the [.env_example](.env_example) file and name it *.env* and fill in the required information:
+2. Copy the [.env_example](src/.env_example) file and name it *.env* and fill in the required information:
 * ```cp .env_example .env```
 
 ## Starting the Bot
